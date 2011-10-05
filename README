@@ -4,3 +4,10 @@ Macaw is an architecture for testing large-scale distributed systems.
 
 Components:
 
+	Scheduler
+
+	Monitor:
+
+	Logger:
+
+	Oracle:
