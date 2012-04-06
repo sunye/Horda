@@ -11,4 +11,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>org.kevoree.macaw.framework</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.macaw</groupId>
+            <artifactId>Common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>
