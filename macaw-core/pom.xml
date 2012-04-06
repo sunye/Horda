@@ -12,7 +12,7 @@
 
     <properties>
         <macaw.version>1.0-SNAPSHOT</macaw.version>
-        <kevoree.version>1.6.0-RC1</kevoree.version>
+        <kevoree.version>1.6.0</kevoree.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
@@ -34,6 +34,7 @@
         <module>LowerTester</module>
         <module>Tester</module>
         <module>Common</module>
+        <module>../org.kevoree.macaw.framework</module>
     </modules>
     <build>
         <plugins>
