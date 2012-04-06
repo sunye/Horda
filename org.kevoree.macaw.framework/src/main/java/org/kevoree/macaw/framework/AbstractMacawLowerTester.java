@@ -4,6 +4,7 @@ import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractComponentType;
 import org.kevoree.framework.MessagePort;
 import org.kevoree.framework.message.StdKevoreeMessage;
+import org.macaw.AdapterWrapper;
 import org.macaw.messages.MethodResult;
 
 import java.io.Serializable;
@@ -39,9 +40,26 @@ import java.io.Serializable;
 @Provides({
 		@ProvidedPort(name = "requestTest", type = PortType.MESSAGE, messageType = "request")
 })
+@DictionaryType({
+		@DictionaryAttribute(name = "AdapterClass", optional = false, dataType = String.class)
+})
 public abstract class AbstractMacawLowerTester extends AbstractComponentType {
 
 	protected abstract void executeRequest (StdKevoreeMessage message);
+
+	protected AdapterWrapper adapter;
+
+	@Start
+	public void start () throws Throwable {
+		Class clazz = Class.forName(this.getDictionary().get("AdapterClass").toString());
+		adapter = new AdapterWrapper(clazz);
+		adapter.setup();
+	}
+
+	@Stop
+	public void stop() throws Throwable {
+		adapter.cleanup();
+	}
 
 	@Port(name = "requestTest")
 	public void request (Object message) {

@@ -3,8 +3,7 @@ package org.macaw.lowertester;
 import org.kevoree.annotation.*;
 import org.kevoree.framework.message.StdKevoreeMessage;
 import org.kevoree.macaw.framework.AbstractMacawLowerTester;
-import org.macaw.adapter.AdapterWrapper;
-import org.macaw.adapter.Executor;
+import org.macaw.AdapterWrapper;
 import org.macaw.messages.MessageFactory;
 import org.macaw.messages.MethodCall;
 import org.macaw.messages.MethodResult;
@@ -22,9 +21,9 @@ import java.util.logging.Logger;
  */
 @Library(name = "Macaw")
 @ComponentType
-@Provides({
+/*@Provides({
 		@ProvidedPort(name = "Executor", type = PortType.MESSAGE, className = Executor.class)
-})
+})*/
 public class LowerTester extends AbstractMacawLowerTester {
 
 	/**
@@ -45,7 +44,7 @@ public class LowerTester extends AbstractMacawLowerTester {
 	/*
 		 * Adapter
 		 */
-	private AdapterWrapper adapter;
+//	private AdapterWrapper adapter;
 	/**
 	 * Main thread.
 	 */
@@ -57,28 +56,31 @@ public class LowerTester extends AbstractMacawLowerTester {
 
 	@Start
 	public void start () throws Throwable {
-		adapter.setup();
+		super.start();
+//		adapter.setup();
 		testerThread.start();
 	}
 
 	@Stop
 	public void stop () throws Throwable {
+		super.stop();
 		testerThread.interrupt();
-		adapter.cleanup();
+//		adapter.cleanup();
 	}
 
 	@Update
 	public void update () {
 	}
 
-	@Port(name = "Executor", method = "execute")
+	/*@Port(name = "Executor", method = "execute")
 	public void execute (MethodCall mc) {
 		calls.offer(mc);
-	}
+	}*/
 
 	@Override
 	protected void executeRequest (StdKevoreeMessage message) {
 		// build MethodCall according to Kevoree message
+		// TODO check if we need to use the id of the Kevoree message because the reponse sent to the UpperTester must contains this id
 		int id = (Integer)message.getValue("id").get();
 		String test = message.getValue("tests").get().toString();
 		Serializable[] args = (Serializable[]) message.getValue("tests").get();

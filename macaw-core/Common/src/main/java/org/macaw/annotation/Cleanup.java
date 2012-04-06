@@ -1,10 +1,10 @@
-package org.macaw.adapter.annotation;
-
+package org.macaw.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
 /**
  * Meta-annotation Retention indicate that this annotation must be 
  * retained in runtime
@@ -14,6 +14,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface Setup  {
+public @interface Cleanup {
 
 }

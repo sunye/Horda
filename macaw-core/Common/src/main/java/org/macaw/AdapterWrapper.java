@@ -14,22 +14,19 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with PeerUnit.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.macaw.adapter;
+package org.macaw;
+
+import org.macaw.annotation.Action;
+import org.macaw.annotation.Cleanup;
+import org.macaw.annotation.Setup;
+import org.macaw.messages.MethodCall;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-
-import org.macaw.adapter.annotation.Action;
-import org.macaw.adapter.annotation.Setup;
-import org.macaw.adapter.annotation.Cleanup;
-import org.macaw.messages.MethodCall;
 
 /**
  *
@@ -44,7 +41,7 @@ public class AdapterWrapper {
     private Method setup;
     private Method cleanup;
 
-    public AdapterWrapper(Class<?> klass) {
+    public AdapterWrapper (Class<?> klass) {
         assert klass != null;
 
         this.klass = klass;
@@ -108,7 +105,7 @@ public class AdapterWrapper {
 
     /**
      * Parse the test case to extract the methods to be executed
-     * @param class
+     * @param c
      */
     private void parse(Class<?> c) {
 
