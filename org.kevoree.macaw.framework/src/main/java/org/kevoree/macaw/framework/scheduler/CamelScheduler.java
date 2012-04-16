@@ -9,6 +9,7 @@ import org.kevoree.framework.MessagePort;
 import org.kevoree.framework.message.StdKevoreeMessage;
 import org.kevoree.library.camel.framework.AbstractKevoreeCamelComponentType;
 import org.kevoree.macaw.framework.MacawMessageTypes;
+import org.macaw.messages.MethodResult;
 
 import java.util.List;
 
@@ -66,13 +67,18 @@ public class CamelScheduler extends AbstractKevoreeCamelComponentType implements
     }
 
     @Override
-    public boolean sendSyncToTester(StdKevoreeMessage msg) {
-        //throw new Exception("Not implemented yet !");
-        return true;
+    public MethodResult sendSyncToTester(StdKevoreeMessage msg) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public void waitForResponse(List<Integer> ids) {
-        //Use Camel Correlation
+    public MethodResult waitForResponse(List<Integer> ids) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+
+    @Override
+    public void executeKevScriptStatement(String kscript) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }
