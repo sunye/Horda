@@ -71,7 +71,7 @@ public class PastryTestCase implements TestCase {
 			ids.add(i);
 			scheduler.sendToTester(message);
 		}
-		MethodResult result = scheduler.waitForResponse(ids);
+		List<MethodResult> result = scheduler.waitForResponse(ids);
 		// TODO use result to compare with the oracle
 
 	}
@@ -99,7 +99,7 @@ public class PastryTestCase implements TestCase {
 				scheduler.sendSyncToTester(message);
 			}
 		}
-		MethodResult result = scheduler.waitForResponse(ids);
+		List<MethodResult> result = scheduler.waitForResponse(ids);
 		// TODO use result to compare with the oracle
 	}
 
@@ -127,7 +127,7 @@ public class PastryTestCase implements TestCase {
 			ids.add(i);
 			scheduler.sendSyncToTester(message);
 		}
-		MethodResult result = scheduler.waitForResponse(ids);
+		List<MethodResult> result = scheduler.waitForResponse(ids);
 		// TODO use result to compare with the oracle
 	}
 }

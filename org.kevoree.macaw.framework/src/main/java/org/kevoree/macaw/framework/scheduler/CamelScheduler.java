@@ -72,7 +72,7 @@ public class CamelScheduler extends AbstractKevoreeCamelComponentType implements
     }
 
     @Override
-    public MethodResult waitForResponse(List<Integer> ids) {
+    public List<MethodResult> waitForResponse(List<Integer> ids) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

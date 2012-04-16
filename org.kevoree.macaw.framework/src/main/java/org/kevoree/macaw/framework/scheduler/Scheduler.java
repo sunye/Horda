@@ -18,7 +18,7 @@ public interface Scheduler {
 
     public MethodResult sendSyncToTester(StdKevoreeMessage msg);
 
-    public MethodResult waitForResponse(List<Integer> ids);
+    public List<MethodResult> waitForResponse(List<Integer> ids);
 
 	public void executeKevScriptStatement(String kscript);
 
