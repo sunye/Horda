@@ -6,6 +6,7 @@ import org.kevoree.framework.message.StdKevoreeMessage;
 import org.kevoree.macaw.framework.scheduler.Scheduler;
 import org.kevoree.macaw.framework.testcase.TestCase;
 import org.kevoree.macaw.framework.testcase.TestResult;
+import org.macaw.messages.MethodResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +71,9 @@ public class PastryTestCase implements TestCase {
 			ids.add(i);
 			scheduler.sendToTester(message);
 		}
-		scheduler.waitForResponse(ids);
+		MethodResult result = scheduler.waitForResponse(ids);
+		// TODO use result to compare with the oracle
+
 	}
 
 	public void step3 () {
@@ -96,7 +99,8 @@ public class PastryTestCase implements TestCase {
 				scheduler.sendSyncToTester(message);
 			}
 		}
-		scheduler.waitForResponse(ids);
+		MethodResult result = scheduler.waitForResponse(ids);
+		// TODO use result to compare with the oracle
 	}
 
 	public void step5 () {
@@ -123,6 +127,7 @@ public class PastryTestCase implements TestCase {
 			ids.add(i);
 			scheduler.sendSyncToTester(message);
 		}
-		scheduler.waitForResponse(ids);
+		MethodResult result = scheduler.waitForResponse(ids);
+		// TODO use result to compare with the oracle
 	}
 }
