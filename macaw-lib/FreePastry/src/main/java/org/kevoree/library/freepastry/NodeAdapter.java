@@ -7,10 +7,10 @@ package org.kevoree.library.freepastry;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.concurrent.Future;
-import org.macaw.adapter.annotation.Action;
-import org.macaw.adapter.annotation.Adapter;
-import org.macaw.adapter.annotation.Cleanup;
-import org.macaw.adapter.annotation.Setup;
+import org.macaw.annotation.Action;
+import org.macaw.annotation.Adapter;
+import org.macaw.annotation.Cleanup;
+import org.macaw.annotation.Setup;
 
 /**
  *

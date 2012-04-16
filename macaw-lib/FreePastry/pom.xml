@@ -17,7 +17,7 @@
     </parent>
 -->
     <properties>
-        <kevoree.version>1.6.0-RC1</kevoree.version>
+        <kevoree.version>1.7.0-BETA1</kevoree.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kevoree.include>*:*</kevoree.include>
         <macaw.version>1.0-SNAPSHOT</macaw.version>
@@ -40,8 +40,8 @@
             <version>${kevoree.version}</version>
         </dependency>
         <dependency>
-            <groupId>rice</groupId>
-            <artifactId>FreePastry</artifactId>
+            <groupId>org.freepastry</groupId>
+            <artifactId>pastry</artifactId>
             <version>2.1</version>
         </dependency>
         <dependency>
@@ -106,4 +106,12 @@
             </plugin>
         </plugins>
     </build>
+
+    <repositories>
+        <repository>
+            <id>nuiton-release</id>
+            <url>http://maven.nuiton.org/nexus/content/groups/releases/</url>
+        </repository>
+    </repositories>
+
 </project>
