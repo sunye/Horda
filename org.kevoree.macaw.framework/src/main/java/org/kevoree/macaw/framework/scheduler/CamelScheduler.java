@@ -5,8 +5,12 @@ import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.kevoree.annotation.*;
 import org.kevoree.api.service.core.script.KevScriptEngine;
+import org.kevoree.framework.MessagePort;
+import org.kevoree.framework.message.StdKevoreeMessage;
 import org.kevoree.library.camel.framework.AbstractKevoreeCamelComponentType;
 import org.kevoree.macaw.framework.MacawMessageTypes;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,32 +27,10 @@ import org.kevoree.macaw.framework.MacawMessageTypes;
 })
 @Provides({
         @ProvidedPort(name = "response", type = PortType.MESSAGE, messageType = "response"),
-        @ProvidedPort(name = "query", type = PortType.MESSAGE)
+        @ProvidedPort(name = "query", type = PortType.MESSAGE,messageType = "macawQuery")
 })
-public class CamelScheduler extends AbstractKevoreeCamelComponentType implements MacawMessageTypes {
-    /*
- private final int nbPeerNodes = 10;
+public class CamelScheduler extends AbstractKevoreeCamelComponentType implements MacawMessageTypes, Scheduler {
 
- public void start() {
-     KevScriptEngine kengine = getKevScriptEngineFactory().createKevScriptEngine();
-     for(int i =0 ;i< nbPeerNodes ; i++){
-         kengine.addVariable("nodeName","node"+i);
-         kengine.append("addNode {nodeName} : JavaSeNode");
-         kengine.append("addComponent freePastry0@{nodeName} : FreePastryNode");
-     }
-     kengine.interpretDeploy();
- }
-
- @Stop
- public void stop() {
-     KevScriptEngine kengine = getKevScriptEngineFactory().createKevScriptEngine();
-     for(int i =0 ;i< nbPeerNodes ; i++){
-         kengine.addVariable("nodeName","node"+i);
-         kengine.append("addNode {nodeName} : JavaSeNode");
-     }
-     kengine.interpretDeploy();
- }
-    */
     @Override
     protected void buildRoutes(RouteBuilder rb) {
         rb.from("kport:response").process(new Processor() {
@@ -67,4 +49,20 @@ public class CamelScheduler extends AbstractKevoreeCamelComponentType implements
         });
     }
 
+    @Override
+    public void sendToTester(StdKevoreeMessage msg) {
+        //RELY ON FILTERED CHANNEL
+        getPortByName("request", MessagePort.class).process(msg);
+    }
+
+    @Override
+    public boolean sendSyncToTester(StdKevoreeMessage msg) {
+        //throw new Exception("Not implemented yet !");
+        return true;
+    }
+
+    @Override
+    public void waitForResponse(List<Integer> ids) {
+        //Use Camel Correlation
+    }
 }

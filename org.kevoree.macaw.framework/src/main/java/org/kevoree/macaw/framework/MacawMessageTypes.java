@@ -7,6 +7,7 @@ import org.kevoree.annotation.MsgElem;
 import org.macaw.messages.MethodResult;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,6 +19,10 @@ import java.io.Serializable;
 
 
 @MessageTypes({
+        @MessageType(name = "macawQuery", elems = {
+                @MsgElem(name = "testcases", className = String[].class, optional = false)
+
+        }),
         @MessageType(name = "request", elems = {
                 @MsgElem(name = "id", className = Integer.class, optional = false), // an id to identify the request
                 @MsgElem(name = "tests", className = String.class, optional = false), // an array of the test names the component must execute

@@ -1,10 +1,10 @@
 package org.kevoree.library.freepastry;
 
-import org.apache.camel.builder.RouteBuilder;
-import org.kevoree.annotation.*;
+import org.kevoree.ContainerRoot;
 import org.kevoree.api.service.core.script.KevScriptEngine;
-import org.kevoree.framework.AbstractComponentType;
-import org.kevoree.library.camel.framework.AbstractKevoreeCamelComponentType;
+import org.kevoree.macaw.framework.scheduler.Scheduler;
+import org.kevoree.macaw.framework.testcase.TestCase;
+import org.kevoree.macaw.framework.testcase.TestResult;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,38 +14,30 @@ import org.kevoree.library.camel.framework.AbstractKevoreeCamelComponentType;
  */
 
 
-@Library(name = "Freepastry")
-@ComponentType
-@Requires({
-        @RequiredPort(name = "dht", type = PortType.SERVICE, className = DHTNode.class)
-})
-public class PastryTestCase extends AbstractKevoreeCamelComponentType {
+
+public class PastryTestCase implements TestCase {
 
     private final int nbPeerNodes = 10;
 
-    public void start() {
-        KevScriptEngine kengine = getKevScriptEngineFactory().createKevScriptEngine();
-        for(int i =0 ;i< nbPeerNodes ; i++){
-            kengine.addVariable("nodeName","node"+i);
-            kengine.append("addNode {nodeName} : JavaSeNode");
-            kengine.append("addComponent freePastry0@{nodeName} : FreePastryNode");
-        }
-        kengine.interpretDeploy();
-    }
+    private Scheduler scheduler = null;
 
-    @Stop
-    public void stop() {
-        KevScriptEngine kengine = getKevScriptEngineFactory().createKevScriptEngine();
-        for(int i =0 ;i< nbPeerNodes ; i++){
-            kengine.addVariable("nodeName","node"+i);
-            kengine.append("addNode {nodeName} : JavaSeNode");
-        }
-        kengine.interpretDeploy();
+    @Override
+    public void setParentScheduler(Scheduler sch) {
+        scheduler = sch;
     }
 
     @Override
-    protected void buildRoutes(RouteBuilder rb) {
-
+    public ContainerRoot buildTestModel(KevScriptEngine offlineEngine) {
+        for(int i =0 ;i< nbPeerNodes ; i++){
+            offlineEngine.addVariable("nodeName","node"+i);
+            offlineEngine.append("addNode {nodeName} : JavaSeNode");
+            offlineEngine.append("addComponent freePastry0@{nodeName} : FreePastryNode");
+        }
+        return offlineEngine.interpret();
     }
 
+    @Override
+    public TestResult execute() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }
