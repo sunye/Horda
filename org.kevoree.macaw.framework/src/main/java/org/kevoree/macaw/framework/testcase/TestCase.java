@@ -14,6 +14,11 @@ public interface TestCase {
 
     public void setParentScheduler(Scheduler sch);
 
+	/**
+	 * This method allow to build the architecture model of the system under test
+	 * @param offlineEngine
+	 * @return the model of the system to deploy
+	 */
     public ContainerRoot buildTestModel(KevScriptEngine offlineEngine);
 
     public TestResult execute();

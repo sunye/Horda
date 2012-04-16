@@ -1,6 +1,7 @@
 package org.kevoree.macaw.framework.scheduler;
 
 import org.kevoree.framework.message.StdKevoreeMessage;
+import org.macaw.messages.MethodResult;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,8 +16,10 @@ public interface Scheduler {
 
     public void sendToTester(StdKevoreeMessage msg);
 
-    public boolean sendSyncToTester(StdKevoreeMessage msg);
+    public MethodResult sendSyncToTester(StdKevoreeMessage msg);
 
-    public void waitForResponse(List<Integer> ids);
+    public MethodResult waitForResponse(List<Integer> ids);
+
+	public void executeKevScriptStatement(String kscript);
 
 }
