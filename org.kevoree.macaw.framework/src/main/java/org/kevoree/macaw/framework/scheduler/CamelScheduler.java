@@ -43,7 +43,17 @@ public class CamelScheduler extends AbstractKevoreeCamelComponentType implements
         rb.from("kport:query").process(new Processor() {
             @Override
             public void process(Exchange exchange) throws Exception {
+
+                if(exchange.getIn().getBody() instanceof String[]){
+                    String[] testcases = (String[]) exchange.getIn().getBody();
+
+                }
+
+
                 System.out.println("input="+exchange.getIn().getBody());
+
+
+
                 //TODO
             }
         });
