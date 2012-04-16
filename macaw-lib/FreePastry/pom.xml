@@ -24,6 +24,13 @@
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.kevoree.tools</groupId>
+            <artifactId>org.kevoree.tools.camel.framework</artifactId>
+            <version>${kevoree.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.macaw</groupId>
             <artifactId>LowerTester</artifactId>

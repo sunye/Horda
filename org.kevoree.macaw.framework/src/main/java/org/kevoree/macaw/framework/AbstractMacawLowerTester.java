@@ -17,22 +17,7 @@ import java.io.Serializable;
  * @author Erwan Daubert
  * @version 1.0
  */
-@MessageTypes({
-		@MessageType(name = "request", elems = {
-				@MsgElem(name = "id", className = Integer.class, optional = false), // an id to identify the request
-				@MsgElem(name = "tests", className = String.class, optional = false), // an array of the test names the component must execute
-				@MsgElem(name = "parameters", className = Serializable[].class, optional = false),
-				@MsgElem(name = "timeout", className = Integer.class) // the timeout for the execution
 
-		}),
-		@MessageType(name = "response", elems = {
-				@MsgElem(name = "id", className = Integer.class, optional = false),
-				@MsgElem(name = "test", className = String.class, optional = false),
-				@MsgElem(name = "parameters", className = Serializable[].class, optional = false),
-				@MsgElem(name = "timeout", className = Integer.class),
-				@MsgElem(name = "result", className = MethodResult.class, optional = false) // the JUnit TestResult of the execution // TODO fix class name type
-		})
-})
 @ComponentFragment
 @Requires({
 		@RequiredPort(name = "responseTest", type = PortType.MESSAGE, messageType = "response")
@@ -43,7 +28,7 @@ import java.io.Serializable;
 @DictionaryType({
 		@DictionaryAttribute(name = "AdapterClass", optional = false, dataType = String.class)
 })
-public abstract class AbstractMacawLowerTester extends AbstractComponentType {
+public abstract class AbstractMacawLowerTester extends AbstractComponentType implements MacawMessageTypes {
 
 	protected abstract void executeRequest (StdKevoreeMessage message);
 
@@ -51,7 +36,7 @@ public abstract class AbstractMacawLowerTester extends AbstractComponentType {
 
 	@Start
 	public void start () throws Throwable {
-		Class clazz = Class.forName(this.getDictionary().get("AdapterClass").toString());
+		Class clazz = getClass().getClassLoader().loadClass(this.getDictionary().get("AdapterClass").toString());
 		adapter = new AdapterWrapper(clazz);
 		adapter.setup();
 	}
