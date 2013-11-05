@@ -12,7 +12,6 @@ public class MethodResult extends Message {
     private Object result;
     private Throwable error;
 
-
     protected MethodResult(int id, MethodCall md) {
         super(id);
         this.md = md;
@@ -29,19 +28,19 @@ public class MethodResult extends Message {
     public long delay() {
         return stop - start;
     }
-    
+
     public Object result() {
         return result;
     }
-    
+
     public Throwable error() {
         return error;
     }
-    
+
     public void setResult(Object o) {
         result = o;
     }
-    
+
     public void setError(Throwable t) {
         error = t;
     }

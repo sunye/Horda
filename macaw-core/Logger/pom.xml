@@ -4,7 +4,7 @@
 
     <groupId>org.macaw</groupId>
     <artifactId>Logger</artifactId>
-    <version>${macaw.version}</version>
+    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Macaw::Core::Logger</name>
     <parent>
@@ -13,16 +13,18 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
+    <repositories>
+        <repository>
+            <id>sonatype-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
-            <groupId>org.macaw</groupId>
-            <artifactId>Common</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.macaw</groupId>
-            <artifactId>org.kevoree.macaw.framework</artifactId>
-            <version>${macaw.version}</version>
+            <groupId>org.mapdb</groupId>
+            <artifactId>mapdb</artifactId>
+            <version>0.9-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

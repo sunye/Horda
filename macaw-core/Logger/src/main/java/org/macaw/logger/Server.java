@@ -9,5 +9,4 @@ package org.macaw.logger;
  * @author sunye
  */
 public class Server {
-    
 }

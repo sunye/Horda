@@ -41,7 +41,7 @@ public class Disk {
         File dir = Disk.createTempDir("storage");
 
         System.out.println(dir.getAbsolutePath());
-        
+
         Disk.removeDir(dir);
     }
 }

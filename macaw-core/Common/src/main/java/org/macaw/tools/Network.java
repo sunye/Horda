@@ -14,7 +14,7 @@ import java.net.ServerSocket;
 public class Network {
 
     public static int freeLocalPort() {
-        int port  = -1;
+        int port = -1;
         ServerSocket socket = null;
         try {
             socket = new ServerSocket(0);
@@ -30,5 +30,4 @@ public class Network {
         }
         return port;
     }
-
 }

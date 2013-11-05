@@ -18,6 +18,7 @@
     </properties>
 
     <dependencies>
+        <!--
         <dependency>
             <groupId>org.kevoree.tools</groupId>
             <artifactId>org.kevoree.tools.javase.framework</artifactId>
@@ -29,16 +30,22 @@
             <artifactId>org.kevoree.tools.annotation.api</artifactId>
             <version>${kevoree.version}</version>
         </dependency>
+        -->
     </dependencies>
     <modules>
+        <module>Logger</module>
         <module>LowerTester</module>
-        <!--<module>Tester</module>-->
+        <!--
+        
+        <module>Tester</module>
         <module>Common</module>
         <module>../org.kevoree.macaw.framework</module>
-		<module>Database</module>
-		<module>Dictionary</module>
-		<module>Logger</module>
-		<module>SystemMonitor</module>
+        <module>Database</module>
+        <module>Dictionary</module>
+        
+        <module>SystemMonitor</module>
+        
+        -->
     </modules>
     <build>
         <plugins>

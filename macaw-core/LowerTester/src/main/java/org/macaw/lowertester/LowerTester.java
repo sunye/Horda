@@ -22,142 +22,143 @@ import java.util.logging.Logger;
 @Library(name = "Macaw")
 @ComponentType
 /*@Provides({
-		@ProvidedPort(name = "Executor", type = PortType.MESSAGE, className = Executor.class)
-})*/
+ @ProvidedPort(name = "Executor", type = PortType.MESSAGE, className = Executor.class)
+ })*/
 public class LowerTester extends AbstractMacawLowerTester {
 
-	/**
-	 * Logger
-	 */
-	private static final Logger LOG = Logger.getLogger(
-			LowerTester.class.getName());
-	/**
-	 * Stores arriving method calls.
-	 */
-	private final BlockingQueue<MethodCall> calls =
-			new ArrayBlockingQueue<MethodCall>(10);
-	/**
-	 * Stores method execution results.
-	 */
-	private final BlockingQueue<MethodResult> results =
-			new ArrayBlockingQueue<MethodResult>(10);
-	/*
-		 * Adapter
-		 */
+    /**
+     * Logger
+     */
+    private static final Logger LOG = Logger.getLogger(
+            LowerTester.class.getName());
+    /**
+     * Stores arriving method calls.
+     */
+    private final BlockingQueue<MethodCall> calls =
+            new ArrayBlockingQueue<MethodCall>(10);
+    /**
+     * Stores method execution results.
+     */
+    private final BlockingQueue<MethodResult> results =
+            new ArrayBlockingQueue<MethodResult>(10);
+    /*
+     * Adapter
+     */
 //	private AdapterWrapper adapter;
-	/**
-	 * Main thread.
-	 */
-	private Thread testerThread = new Thread(new ActionExecutionThread());
-	/**
-	 * Thread used to invoke @Action methods
-	 */
-	private Thread invocationThread;
+    /**
+     * Main thread.
+     */
+    private Thread testerThread = new Thread(new ActionExecutionThread());
+    /**
+     * Thread used to invoke
+     *
+     * @Action methods
+     */
+    private Thread invocationThread;
 
-	@Start
-	public void start () throws Throwable {
-		super.start();
+    @Start
+    public void start() throws Throwable {
+        super.start();
 //		adapter.setup();
-		testerThread.start();
-	}
+        testerThread.start();
+    }
 
-	@Stop
-	public void stop () throws Throwable {
-		super.stop();
-		testerThread.interrupt();
+    @Stop
+    public void stop() throws Throwable {
+        super.stop();
+        testerThread.interrupt();
 //		adapter.cleanup();
-	}
+    }
 
-	@Update
-	public void update () {
-	}
+    @Update
+    public void update() {
+    }
 
-	/*@Port(name = "Executor", method = "execute")
-	public void execute (MethodCall mc) {
-		calls.offer(mc);
-	}*/
+    /*@Port(name = "Executor", method = "execute")
+     public void execute (MethodCall mc) {
+     calls.offer(mc);
+     }*/
+    @Override
+    protected void executeRequest(StdKevoreeMessage message) {
+        // build MethodCall according to Kevoree message
+        // TODO check if we need to use the id of the Kevoree message because the reponse sent to the UpperTester must contains this id
+        int id = (Integer) message.getValue("id").get();
+        String test = message.getValue("tests").get().toString();
+        Serializable[] args = (Serializable[]) message.getValue("tests").get();
+        int timeout = (Integer) message.getValue("timeout").get();
+        MethodCall mc = MessageFactory.newMethodCall(test, args, timeout);
+        calls.offer(mc);
+    }
 
-	@Override
-	protected void executeRequest (StdKevoreeMessage message) {
-		// build MethodCall according to Kevoree message
-		// TODO check if we need to use the id of the Kevoree message because the reponse sent to the UpperTester must contains this id
-		int id = (Integer)message.getValue("id").get();
-		String test = message.getValue("tests").get().toString();
-		Serializable[] args = (Serializable[]) message.getValue("tests").get();
-		int timeout = (Integer)message.getValue("timeout").get();
-		MethodCall mc = MessageFactory.newMethodCall(test, args, timeout);
-		calls.offer(mc);
-	}
+    /**
+     * Main thread execution. Waits for action availability and executes
+     * actions.
+     */
+    private void execution() {
+        try {
+            MethodCall mc = calls.take();
+            invocationThread = new Thread(new InvokerThread(mc));
+            invocationThread.start();
+            if (mc.timeout() > 0) {
+                invocationThread.join(mc.timeout());
+                if (invocationThread.isAlive()) {
+                    invocationThread.interrupt();
+                }
+            }
+        } catch (InterruptedException ex) {
+            LOG.log(Level.SEVERE, "ActionExecutionThread interrupted exception", ex);
+        }
+    }
 
-	/**
-	 * Main thread execution.
-	 * Waits for action availability and executes actions.
-	 */
-	private void execution () {
-		try {
-			MethodCall mc = calls.take();
-			invocationThread = new Thread(new InvokerThread(mc));
-			invocationThread.start();
-			if (mc.timeout() > 0) {
-				invocationThread.join(mc.timeout());
-				if (invocationThread.isAlive()) {
-					invocationThread.interrupt();
-				}
-			}
-		} catch (InterruptedException ex) {
-			LOG.log(Level.SEVERE, "ActionExecutionThread interrupted exception", ex);
-		}
-	}
+    /**
+     * Invokes a method on the adapter.
+     *
+     * @param mc the method that is invoked
+     */
+    private void invoke(MethodCall md) {
+        assert adapter != null : "Null adapter";
 
+        MethodResult result = MessageFactory.newMethodResult(md);
 
-	/**
-	 * Invokes a method on the adapter.
-	 *
-	 * @param mc the method that is invoked
-	 */
-	private void invoke (MethodCall md) {
-		assert adapter != null : "Null adapter";
+        try {
+            result.start();
+            result.setResult(adapter.execute(md));
+            if (Thread.interrupted()) {
+                LOG.finest("Thread was interrupted.");
+            }
+        } catch (Throwable e) {
+            StringWriter writer = new StringWriter();
+            PrintWriter pw = new PrintWriter(writer);
+            e.printStackTrace(pw);
+            pw.flush();
+            writer.flush();
+            LOG.log(Level.WARNING, writer.toString());
+            result.setError(e);
+        } finally {
+            result.stop();
+            results.offer(result);
+        }
+    }
 
-		MethodResult result = MessageFactory.newMethodResult(md);
+    private class InvokerThread implements Runnable {
 
-		try {
-			result.start();
-			result.setResult(adapter.execute(md));
-			if (Thread.interrupted()) {
-				LOG.finest("Thread was interrupted.");
-			}
-		} catch (Throwable e) {
-			StringWriter writer = new StringWriter();
-			PrintWriter pw = new PrintWriter(writer);
-			e.printStackTrace(pw);
-			pw.flush();
-			writer.flush();
-			LOG.log(Level.WARNING, writer.toString());
-			result.setError(e);
-		} finally {
-			result.stop();
-			results.offer(result);
-		}
-	}
+        MethodCall mc;
 
-	private class InvokerThread implements Runnable {
+        public InvokerThread(MethodCall md) {
+            this.mc = md;
+        }
 
-		MethodCall mc;
+        public void run() {
+            LOG.entering("InvokerThread", "run()");
+            invoke(mc);
+        }
+    }
 
-		public InvokerThread (MethodCall md) {
-			this.mc = md;
-		}
+    private class ActionExecutionThread implements Runnable {
 
-		public void run () {
-			LOG.entering("InvokerThread", "run()");
-			invoke(mc);
-		}
-	}
-
-	private class ActionExecutionThread implements Runnable {
-		public void run () {
-			LOG.entering("ActionExecutionThread", "run()");
-			execution();
-		}
-	}
+        public void run() {
+            LOG.entering("ActionExecutionThread", "run()");
+            execution();
+        }
+    }
 }

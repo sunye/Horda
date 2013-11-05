@@ -2,19 +2,16 @@ package org.macaw.messages;
 
 import java.io.Serializable;
 
-
 /**
  * @author sunye
  *
  */
 public class MethodCall extends Message {
 
-
     /**
      * Method name
      */
     private String name;
-    
     private Serializable[] arguments;
     /**
      * Method execution timeout (in milliseconds).
@@ -43,9 +40,9 @@ public class MethodCall extends Message {
         return String.format("Method: %s", name);
     }
 
-
     /**
      * Returns the name associated to method
+     *
      * @return String
      */
     public String name() {
@@ -54,14 +51,14 @@ public class MethodCall extends Message {
 
     /**
      * Returns the method execution timeout (in milliseconds)
+     *
      * @return int
      */
     public int timeout() {
         return timeout;
     }
 
-
-    /** 
+    /**
      * @return Serializable[] the arguments of the call.
      */
     public Serializable[] arguments() {
