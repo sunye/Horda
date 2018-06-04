@@ -4,23 +4,26 @@
  */
 package org.macaw.logger;
 
-import java.util.Map;
+import org.mapdb.DB;
+import org.mapdb.HTreeMap;
+import org.mapdb.Serializer;
+
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
-import org.mapdb.DB;
 
 /**
- *
  * @author sunye
  */
 public class MapDBHandler extends Handler {
-    
+
     private final DB database;
-    private final Map<Long, LogRecord> map;
-    
-    protected MapDBHandler (DB db) {
+    private final HTreeMap<Long, LogRecord> map;
+
+    protected MapDBHandler(DB db) {
         database = db;
-        map = db.getTreeMap("macaw:logger");
+        map = db
+                .hashMap("macaw:logger", Serializer.STRING, Serializer.JAVA)
+                .createOrOpen();
     }
 
     @Override
@@ -37,5 +40,5 @@ public class MapDBHandler extends Handler {
     public void close() throws SecurityException {
         database.close();
     }
-    
+
 }

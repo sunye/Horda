@@ -4,13 +4,12 @@
  */
 package org.macaw.logger;
 
+import org.mapdb.DB;
+import org.mapdb.DBMaker;
+
 import java.io.File;
-import java.util.concurrent.ConcurrentNavigableMap;
-import java.util.logging.Handler;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
-import org.mapdb.DBMaker;
-import org.mapdb.DB;
 
 /**
  *
@@ -21,7 +20,7 @@ public class Client {
     private DB database;
 
     public void start() {
-        database = DBMaker.newFileDB(new File("testdb"))
+        database = DBMaker.fileDB(new File("testdb"))
                 .closeOnJvmShutdown()
                 .make();
 
