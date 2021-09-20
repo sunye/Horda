@@ -27,12 +27,30 @@
         <url>http://atlanmod.org</url>
     </organization>
 
+    <properties>
+        <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
+        <jvm.version>1.8</jvm.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+
     <modules>
-        <module>horda-commons</module>
-        <module>horda-coordinator</module>
-        <module>horda-tester</module>
-        <module>macaw-core</module>
-        <module>horda-annotations</module>
-        <module>horda-fakes</module>
+        <module>horda-dht-adapter</module>
+        <module>horda-dht-rmi-adapter</module>
     </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>fr.inria.atlanmod.commons</groupId>
+            <artifactId>commons-core</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>3.0.2</version>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
 </project>

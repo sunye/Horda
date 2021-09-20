@@ -1,3 +1,3 @@
 rootProject.name = 'horda'
 
-include ':annotations', ':common', ':coordinator', ':tester'
+include ':annotations', ':common', ':coordinator', ':commons'
